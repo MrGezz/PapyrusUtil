@@ -187,7 +187,11 @@ public:
 
 		int format = read<int>(file);
 
-		if (format != 2)
+		// 2 = packed id/offset pairs (every AE library up to 1.6.1179); 5 = the dense table
+		// meh321 introduced with the 1.7.99 library (2026-08-20): 96-byte header, then one
+		// uint32 offset per ID, indexed by ID, 0 = unassigned. Format 1 is the SE 1.5.x
+		// "version-*.bin" packing and never appears under the versionlib- name.
+		if (format != 2 && format != 5)
 			return false;
 
 		for (int i = 0; i < 4; i++)
@@ -198,6 +202,9 @@ public:
 			_snprintf_s(verName, 64, "%d.%d.%d.%d", _ver[0], _ver[1], _ver[2], _ver[3]);
 			_verStr = verName;
 		}
+
+		if (format == 5)
+			return LoadDense(file);
 
 		int tnLen = read<int>(file);
 
@@ -276,6 +283,51 @@ public:
 
 			poffset = q2;
 			pvid = q1;
+		}
+
+		return true;
+	}
+
+	// Format 5 body, after the version numbers: char name[64]; int32 pointer size; int32 data
+	// format (reserved, 0); int32 count; uint32 offset[count]. Same layout commonlib-shared's
+	// REL::IDDB::load_v5 memory-maps.
+	bool LoadDense(std::ifstream& file)
+	{
+		char name[65];
+		file.read(name, 64);
+		name[64] = '\0';
+		_moduleName = name;
+
+		{
+			HMODULE handle = GetModuleHandleA(_moduleName.empty() ? NULL : _moduleName.c_str());
+			_base = (unsigned long long)handle;
+		}
+
+		int ptrSize = read<int>(file);
+		int dataFormat = read<int>(file);
+		int count = read<int>(file);
+		(void)ptrSize;
+
+		if (!file.good() || dataFormat != 0 || count < 0 || count > 0x4000000)
+		{
+			Clear();
+			return false;
+		}
+
+		for (int id = 0; id < count; id++)
+		{
+			unsigned int offset = read<unsigned int>(file);
+			if (offset != 0)
+			{
+				_data[(unsigned long long)id] = offset;
+				_rdata[offset] = (unsigned long long)id;
+			}
+		}
+
+		if (file.fail())
+		{
+			Clear();
+			return false;
 		}
 
 		return true;

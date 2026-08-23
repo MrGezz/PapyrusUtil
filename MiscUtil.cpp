@@ -85,7 +85,7 @@ namespace MiscUtil {
 		if (ptr != 0) SafeWrite8(ptr + 0x118, (enabled ? 1 : 0));
 	}*/
 	void SetMenus(StaticFunctionTag* base, bool enabled){
-		MenuManager::GetSingleton()->showMenus = enabled;
+		MenuManager::GetSingleton()->ShowMenus(enabled); // skse64 2.3.0: showMenus is private, use the accessor
 	}
 
 	BSFixedString GetRaceEditorID(StaticFunctionTag* base, TESRace* RaceRef) {
@@ -316,7 +316,7 @@ namespace MiscUtil {
 			for (UInt32 idx = 0, n = 0; idx < count; idx++) {
 				TESObjectREFR* ObjRef = GetCellObj(Cell, idx);
 
-				if (ObjRef == NULL || ObjRef->baseForm->formType != FindType) continue; // Invalid
+				if (ObjRef == NULL || ObjRef->baseForm == NULL || ObjRef->baseForm->formType != FindType) continue; // Invalid
 				else if (SearchRadius > 0.0f && !IsWithinRadius(CenterObj, ObjRef, SearchRadius)) continue; // Outside search radius
 				else if (FindKeyword && !HasKeyword(ObjRef, FindKeyword)) continue; // Missing keyword
 				else output.push_back(ObjRef); // MATCH

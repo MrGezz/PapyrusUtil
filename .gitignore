@@ -1,35 +1,5 @@
-Release/*
-x64/*
-PapyrusUtil.7z
-
-# visual studio
-*.sdf
-*.opensdf
-*.suo
-.vs
-*.VC.db
-*.VC.opendb
-*.ncb
+bin/
+obj/
+vcpkg_installed/
 *.user
-*.aps
-*.vspscc
-
-# build output
-*.tlog
-*.lastbuildstate
-*.unsuccessfulbuild
-*.lib
-*.log
-*.obj
-*.idb
-*.pdb
-*.res
-*.cache
-BuildLog.htm
-*.exe
-*.dll
-*.exp
-*.ilk
-
-# cmake
-build/*
+.vs/

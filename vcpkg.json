@@ -1,0 +1,16 @@
+{
+  "name": "papyrusutil-deps",
+  "version-string": "4.7",
+  "dependencies": [
+    "boost-filesystem",
+    "boost-atomic",
+    "boost-algorithm",
+    "boost-container",
+    "boost-random",
+    "boost-lexical-cast",
+    "boost-array",
+    "boost-iterator",
+    "boost-range"
+  ],
+  "builtin-baseline": "7f3781e19cc7d4e4882a4caec01668c6f7b5c163"
+}
