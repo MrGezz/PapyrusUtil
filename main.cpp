@@ -38,9 +38,9 @@ extern "C" {
 		0,
 		// Addresses come from the Address Library (versionlibdb.h, formats 2 and 5) but the
 		// game structs are taken from the skse64 headers this build compiled against, so the
-		// plugin is pinned to the runtime those headers describe: 1.7.99 (skse64 2.3.0).
+		// plugin is pinned to the runtime those headers describe: 1.7.104 (skse64 2.3.1).
 		SKSEPluginVersionData::kVersionIndependent_StructsPost629,
-		{ RUNTIME_VERSION_1_7_99, 0 },
+		{ RUNTIME_VERSION_1_7_104, 0 },
 
 		0,	// works with any version of the script extender. you probably do not need to put anything here
 	};
